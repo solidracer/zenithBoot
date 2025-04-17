@@ -1,0 +1,5 @@
+build
+ovmf
+.ccls
+.ccls-cache
+kernel.elf
