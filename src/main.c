@@ -65,8 +65,13 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE handle, EFI_SYSTEM_TABLE *sysTable) {
                filesize         = phdr->p_filesz;
             Elf64_Addr segment = phdr->p_paddr;
             EFI_MEMORY_TYPE memtype = EfiLoaderData;
-            if (phdr->p_flags & PF_X)
+            if (phdr->p_flags & PF_X) {
+                if ((phdr->p_flags & PF_WX) == PF_WX) {
+                    Print(L"WARNING: SEGMENT HAS WRITE & EXECUTE PERMISSIONS\r\n");
+                    pauseConsole();
+                }
                 memtype = EfiLoaderCode;
+            }
             stat = gBS->AllocatePages(AllocateAddress, memtype, pages, &segment);
             ERRCHECK(L"error when allocating pages for segment", stat);
             SetMem((VOID*)segment, phdr->p_memsz, 0);
