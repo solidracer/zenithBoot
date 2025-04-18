@@ -4,6 +4,6 @@
 #include <efi.h>
 #include <efilib.h>
 
-EFI_STATUS locateFS(EFI_SIMPLE_FILE_SYSTEM_PROTOCOL **fs);
+EFI_STATUS EFIAPI locateFS(EFI_SIMPLE_FILE_SYSTEM_PROTOCOL **fs);
 
 #endif

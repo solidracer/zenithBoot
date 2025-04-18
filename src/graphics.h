@@ -3,6 +3,6 @@
 
 #include "elfloader.h"
 
-EFI_STATUS initGraphics(EFI_GRAPHICS_OUTPUT_PROTOCOL **gop);
+EFI_STATUS EFIAPI initGraphics(EFI_GRAPHICS_OUTPUT_PROTOCOL **gop);
 
 #endif

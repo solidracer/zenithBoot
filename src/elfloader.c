@@ -1,6 +1,6 @@
 #include "elfloader.h"
 
-EFI_STATUS isValidELF(Elf64_Ehdr *ehdr, EFI_FILE_PROTOCOL *file, BOOLEAN *value) {
+EFI_STATUS EFIAPI isValidELF(Elf64_Ehdr *ehdr, EFI_FILE_PROTOCOL *file, BOOLEAN *value) {
     EFI_STATUS stat;
     UINTN size = sizeof(Elf64_Ehdr);
     stat = file->Read(file, &size, ehdr);
@@ -15,7 +15,7 @@ EFI_STATUS isValidELF(Elf64_Ehdr *ehdr, EFI_FILE_PROTOCOL *file, BOOLEAN *value)
     return stat;
 }
 
-EFI_STATUS readHeaders(Elf64_Ehdr *ehdr, Elf64_Phdr **phdrs, EFI_FILE_PROTOCOL *file) {
+EFI_STATUS EFIAPI readHeaders(Elf64_Ehdr *ehdr, Elf64_Phdr **phdrs, EFI_FILE_PROTOCOL *file) {
     EFI_STATUS stat;
     stat = file->SetPosition(file, ehdr->e_phoff);
     if (EFI_ERROR(stat)) return stat;

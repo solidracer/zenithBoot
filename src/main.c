@@ -1,5 +1,5 @@
 #include "flags.h"
-#include "graphics.h"
+#include "console.h"
 
 /* zenithBoot, a part of zenithOS. */
 /* WRITTEN BY SOLIDRACER */
@@ -8,6 +8,7 @@
 #define ERRCHECK( msg, stat )               \
 if (EFI_ERROR(stat)) {                      \
     Print(L"%s: %r\r\n", msg, stat);        \
+    pauseConsole();                         \
     return stat;                            \
 }
 
@@ -49,6 +50,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE handle, EFI_SYSTEM_TABLE *sysTable) {
 
     if (!iself) {
         Print(L"error when validating elf file: File is not a valid elf file\r\n");
+        pauseConsole();
         return 1;
     }
 
