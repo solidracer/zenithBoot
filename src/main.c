@@ -1,6 +1,8 @@
 #include "flags.h"
 #include "console.h"
 
+#include "bootinfo.h"
+
 /* zenithBoot, a part of zenithOS. */
 /* WRITTEN BY SOLIDRACER */
 
@@ -12,7 +14,7 @@ if (EFI_ERROR(stat)) {                      \
     return stat;                            \
 }
 
-typedef void (*kmain_t)();
+typedef void (*kmain_t)(bootInfo *);
 
 EFI_STATUS EFIAPI efi_main(EFI_HANDLE handle, EFI_SYSTEM_TABLE *sysTable) {
     InitializeLib(handle, sysTable);
@@ -115,6 +117,12 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE handle, EFI_SYSTEM_TABLE *sysTable) {
     stat = gBS->ExitBootServices(handle, mapkey);
     ERRCHECK(L"failed to exit boot services", stat);
 
+    bootInfo info = {
+        .framebuffer = fb,
+        .width = width,
+        .height = height
+    };
+
     for (UINTN y = 0; y < height; y++) {
         for (UINTN x = 0; x < width; x++) {
             fb[(y * width) + x] = 0x00FFFFFF;
@@ -122,7 +130,7 @@ EFI_STATUS EFIAPI efi_main(EFI_HANDLE handle, EFI_SYSTEM_TABLE *sysTable) {
     }
 
     kmain_t main = (kmain_t)ehdr.e_entry;
-    main(fb, width, height);
+    main(&info);
 
     __builtin_unreachable();
 }
